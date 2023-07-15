@@ -24,4 +24,16 @@ public class MateriaServiceImpl implements IMateriaService{
 		return this.iMateriaRepository.buscarMateria(id);
 	}
 
+	@Override
+	public void actualizarMateria(Materia materia) {
+		// TODO Auto-generated method stub
+		this.iMateriaRepository.actualizarMateria(materia);
+	}
+
+	@Override
+	public void eliminar(Integer id) {
+		// TODO Auto-generated method stub
+		this.iMateriaRepository.eliminar(id);
+	}
+
 }

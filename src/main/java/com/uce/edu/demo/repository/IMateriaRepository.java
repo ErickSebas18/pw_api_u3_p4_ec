@@ -6,4 +6,6 @@ public interface IMateriaRepository {
 
 	public void insertarMateria(Materia materia);
 	public Materia buscarMateria(Integer id);
+	public void actualizarMateria(Materia materia);
+	public void eliminar(Integer id);
 }
