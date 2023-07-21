@@ -3,6 +3,8 @@ package com.uce.edu.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -25,10 +27,10 @@ public class EstudianteControllerRestFul {
 	private IEstudianteService estudianteService;
 	
 	@GetMapping(path= "/{cedula}")
-	public Estudiante consultarPorCedula(@PathVariable String cedula) {
-		return this.estudianteService.seleccionarPorCedula(cedula);
+	public ResponseEntity<Estudiante> consultarPorCedula(@PathVariable String cedula) {
+		//return this.estudianteService.seleccionarPorCedula(cedula);
+		return ResponseEntity.status(227).body(this.estudianteService.seleccionarPorCedula(cedula));
 	}
-	
 	
 	@PostMapping
 	public void guardar(@RequestBody Estudiante estudiante) {
@@ -61,7 +63,12 @@ public class EstudianteControllerRestFul {
 	}*/
 	
 	@GetMapping
-	public List<Estudiante> consultarTodos(@RequestParam String provincia){
-		return this.estudianteService.buscarTodos(provincia);
+	public ResponseEntity<List<Estudiante>> consultarTodos(@RequestParam String provincia){
+		//return this.estudianteService.buscarTodos(provincia);
+		List<Estudiante> lista = this.estudianteService.buscarTodos(provincia);
+		HttpHeaders cabeceras = new HttpHeaders();
+		cabeceras.add("detalleMensaje", "Estudiantes encontrados");
+		cabeceras.add("valorAPI", "Incalculable");
+		return new ResponseEntity<List<Estudiante>>(lista, cabeceras,227);
 	}
 }
