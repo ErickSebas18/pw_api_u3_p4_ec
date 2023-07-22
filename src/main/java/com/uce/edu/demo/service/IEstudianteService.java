@@ -11,4 +11,5 @@ public interface IEstudianteService {
 	public void actualizar(Estudiante estudiante);
 	public void eliminar(Integer id);
 	public List<Estudiante> buscarTodos(String provincia);
+	public Integer estudianteId(Estudiante estudiante);
 }

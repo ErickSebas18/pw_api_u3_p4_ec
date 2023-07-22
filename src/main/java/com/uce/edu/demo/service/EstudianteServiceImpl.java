@@ -44,6 +44,14 @@ public class EstudianteServiceImpl implements IEstudianteService {
 		return this.estudianteRepository.buscarTodos(provincia);
 	}
 
+	@Override
+	public Integer estudianteId(Estudiante estudiante) {
+		// TODO Auto-generated method stub
+		this.estudianteRepository.insertar2(estudiante);
+		Estudiante identificador = this.seleccionarPorCedula(estudiante.getCedula());
+		return identificador.getId();
+	}
+
 	
 	
 	
