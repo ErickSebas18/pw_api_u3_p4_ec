@@ -71,6 +71,14 @@ public class EstudianteRepositoryImpl implements IEstudianteRepository{
 		// TODO Auto-generated method stub
 		this.entityManager.persist(estudiante);
 	}
+
+	@Override
+	public List<Estudiante> buscarEstudiantes() {
+		// TODO Auto-generated method stub
+		TypedQuery<Estudiante> myQuery = this.entityManager.createQuery("Select e from Estudiante e", Estudiante.class);
+		return myQuery.getResultList();
+	}
+	
 	
 	
 

@@ -10,6 +10,7 @@ public class PwApiU3P4EcApplication {
 	
 	public static void main(String[] args) {
 		SpringApplication.run(PwApiU3P4EcApplication.class, args);
+		
 	}
-
+	
 }

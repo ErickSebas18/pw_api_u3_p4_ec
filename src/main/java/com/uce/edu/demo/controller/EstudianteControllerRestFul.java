@@ -3,6 +3,7 @@ package com.uce.edu.demo.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,9 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.uce.edu.demo.repository.modelo.Estudiante;
 import com.uce.edu.demo.service.IEstudianteService;
+import com.uce.edu.demo.service.to.EstudianteTO;
+import com.uce.edu.demo.service.to.MateriaTO;
 
 @RestController
 @RequestMapping("/estudiantes")
@@ -71,7 +76,7 @@ public class EstudianteControllerRestFul {
 		return this.estudianteService.buscarTodos(provincia);
 	}*/
 	
-	@GetMapping
+	/*@GetMapping
 	public ResponseEntity<List<Estudiante>> consultarTodos(@RequestParam String provincia){
 		//return this.estudianteService.buscarTodos(provincia);
 		List<Estudiante> lista = this.estudianteService.buscarTodos(provincia);
@@ -79,10 +84,28 @@ public class EstudianteControllerRestFul {
 		cabeceras.add("detalleMensaje", "Estudiantes encontrados");
 		cabeceras.add("valorAPI", "Incalculable");
 		return new ResponseEntity<List<Estudiante>>(lista, cabeceras,227);
-	}
+	}*/
 	
 	@PostMapping(path="/status",consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_XML_VALUE)
 	public Integer identificador(@RequestBody Estudiante estudiante) {
 		return this.estudianteService.estudianteId(estudiante);
+	}
+	
+	@GetMapping(path = "/hateoas")
+	public ResponseEntity<List<EstudianteTO>> consultarEstudiantesHATEOAS(){
+		List<EstudianteTO> lista = this.estudianteService.buscarEstudiantes();
+		for(EstudianteTO e : lista) {
+			//HYPERMEDIA
+			Link myLink = linkTo(methodOn(EstudianteControllerRestFul.class).buscarPorEstudiante(e.getCedula())).withRel("materias");
+			e.add(myLink);
+		}
+		HttpHeaders cabecera = new HttpHeaders();
+		cabecera.add("c", "Valido los Estudiantes");
+		return new ResponseEntity(lista,cabecera,217);
+	}
+	
+	@GetMapping(path = "/{cedula}/materias")
+	public ResponseEntity<MateriaTO> buscarPorEstudiante(@PathVariable String cedula){
+		return null;
 	}
 }
