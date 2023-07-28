@@ -1,6 +1,11 @@
 package com.uce.edu.demo.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.Link;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.uce.edu.demo.repository.modelo.Materia;
 import com.uce.edu.demo.service.IMateriaService;
+import com.uce.edu.demo.service.to.MateriaTO;
 
 @RestController
 @RequestMapping("/materias")
@@ -40,5 +46,13 @@ public class MateriaControllerRestFul {
 	@DeleteMapping(path = "/borrarMateria/{id}")
 	public void eliminar(@PathVariable Integer id) {
 		this.iMateriaService.eliminar(id);
+	}
+	
+	@GetMapping(path = "/{id}")
+	public ResponseEntity<MateriaTO> buscarMateria(@PathVariable Integer id) {
+		MateriaTO m = this.iMateriaService.buscarPorIdMateria(id);
+		Link link = linkTo(methodOn(MateriaControllerRestFul.class).iMateriaService.buscarMateriaPorId(m.getId())).withSelfRel();
+		m.add(link);
+		return new ResponseEntity(m,null,200);
 	}
 }

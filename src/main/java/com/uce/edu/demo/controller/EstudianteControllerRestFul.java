@@ -1,5 +1,8 @@
 package com.uce.edu.demo.controller;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,14 +19,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
-import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import com.uce.edu.demo.repository.modelo.Estudiante;
 import com.uce.edu.demo.service.IEstudianteService;
+import com.uce.edu.demo.service.IMateriaService;
 import com.uce.edu.demo.service.to.EstudianteTO;
 import com.uce.edu.demo.service.to.MateriaTO;
 
@@ -33,6 +34,9 @@ public class EstudianteControllerRestFul {
 
 	@Autowired
 	private IEstudianteService estudianteService;
+	
+	@Autowired
+	private IMateriaService iMateriaService;
 	
 	@GetMapping(path= "/{cedula}")
 	public ResponseEntity<Estudiante> consultarPorCedula(@PathVariable String cedula) {
@@ -91,7 +95,7 @@ public class EstudianteControllerRestFul {
 		return this.estudianteService.estudianteId(estudiante);
 	}
 	
-	@GetMapping(path = "/hateoas")
+	@GetMapping(path = "/hateoas", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<EstudianteTO>> consultarEstudiantesHATEOAS(){
 		List<EstudianteTO> lista = this.estudianteService.buscarEstudiantes();
 		for(EstudianteTO e : lista) {
@@ -104,8 +108,8 @@ public class EstudianteControllerRestFul {
 		return new ResponseEntity(lista,cabecera,217);
 	}
 	
-	@GetMapping(path = "/{cedula}/materias")
+	@GetMapping(path = "/{cedula}/materias", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MateriaTO> buscarPorEstudiante(@PathVariable String cedula){
-		return null;
+		return new ResponseEntity(this.iMateriaService.buscarPorCedula(cedula), null, 217);
 	}
 }
