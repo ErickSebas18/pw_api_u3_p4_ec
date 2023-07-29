@@ -5,6 +5,7 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.Link;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,10 +32,16 @@ public class MateriaControllerRestFul {
 		this.iMateriaService.agregarMateria(materia);
 	}
 	
-	@GetMapping(path = "/buscarMateria")
+	/*@GetMapping(path = "/buscarMateria")
 	public Materia buscarPorId() {
 		Integer id = 1;
 		return this.iMateriaService.buscarMateriaPorId(id);
+	}*/
+	
+	@GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<MateriaTO> buscarPorId(@PathVariable Integer id) {
+		MateriaTO materia = this.iMateriaService.buscarPorIdMateria(id);
+		return new ResponseEntity(materia, null,200);
 	}
 	
 	@PutMapping(path = "/actualizarMateria/{identificador}")
@@ -48,11 +55,11 @@ public class MateriaControllerRestFul {
 		this.iMateriaService.eliminar(id);
 	}
 	
-	@GetMapping(path = "/{id}")
+	/*@GetMapping(path = "/{id}")
 	public ResponseEntity<MateriaTO> buscarMateria(@PathVariable Integer id) {
 		MateriaTO m = this.iMateriaService.buscarPorIdMateria(id);
 		Link link = linkTo(methodOn(MateriaControllerRestFul.class).iMateriaService.buscarMateriaPorId(m.getId())).withSelfRel();
 		m.add(link);
 		return new ResponseEntity(m,null,200);
-	}
+	}*/
 }

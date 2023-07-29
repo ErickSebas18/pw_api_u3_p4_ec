@@ -11,6 +11,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -30,6 +31,7 @@ import com.uce.edu.demo.service.to.MateriaTO;
 
 @RestController
 @RequestMapping("/estudiantes")
+@CrossOrigin
 public class EstudianteControllerRestFul {
 
 	@Autowired
@@ -109,7 +111,12 @@ public class EstudianteControllerRestFul {
 	}
 	
 	@GetMapping(path = "/{cedula}/materias", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<MateriaTO> buscarPorEstudiante(@PathVariable String cedula){
-		return new ResponseEntity(this.iMateriaService.buscarPorCedula(cedula), null, 217);
+	public ResponseEntity<List<MateriaTO>> buscarPorEstudiante(@PathVariable String cedula){
+		List<MateriaTO> lista = this.iMateriaService.buscarPorCedula(cedula);
+		for(MateriaTO e : lista) {
+			Link link = linkTo(methodOn(MateriaControllerRestFul.class).buscarPorId(e.getId())).withSelfRel();
+			e.add(link);
+		}
+		return new ResponseEntity(lista, null, 217);
 	}
 }
