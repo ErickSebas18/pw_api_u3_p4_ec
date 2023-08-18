@@ -40,10 +40,10 @@ public class EstudianteControllerRestFul {
 	@Autowired
 	private IMateriaService iMateriaService;
 	
-	@GetMapping(path= "/{cedula}")
+	@GetMapping(path= "/{cedula}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Estudiante> consultarPorCedula(@PathVariable String cedula) {
 		//return this.estudianteService.seleccionarPorCedula(cedula);
-		return ResponseEntity.status(227).body(this.estudianteService.seleccionarPorCedula(cedula));
+		return ResponseEntity.status(200).body(this.estudianteService.seleccionarPorCedula(cedula));
 	}
 	
 	@GetMapping(path= "/status2/{cedula}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -52,7 +52,7 @@ public class EstudianteControllerRestFul {
 		return this.estudianteService.seleccionarPorCedula(cedula);
 	}
 	
-	@PostMapping(consumes = "application/xml")
+	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
 	public void guardar(@RequestBody Estudiante estudiante) {
 		this.estudianteService.guardar(estudiante);
 	}
@@ -73,7 +73,7 @@ public class EstudianteControllerRestFul {
 	}
 	
 	@DeleteMapping(path = "/{id}")
-	public void eliminar(@PathVariable Integer id) {
+	public void eliminar(@PathVariable Integer id) { 
 		this.estudianteService.eliminar(id);
 	}
 	
